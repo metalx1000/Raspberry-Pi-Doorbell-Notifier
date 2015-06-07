@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="./js/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+       var audio = $('<audio />', {
+        id : 'bell',
+        controls : 'controls'
+      });
+
+	audio.appendTo("#audioplayer");
+	$("#bell").attr('src', 'bell.mp3');
+
+	function checker(){
+		var bellcheck = setInterval(function(){ 
+			$.get('cgi-bin/bell.cgi',function(data){
+				console.log(data);
+				if(data == 1){
+					$("#bell")[0].play();
+					$("#msg").append("Door Bell Rang at: " + Date() + "<br>");
+					window.clearInterval(bellcheck);
+					setTimeout(function(){ checker(); }, 3000);
+				}
+			}); 
+		}, 50);
+	}
+
+	checker();
+});
+</script>
+</head>
+<body>
+<div id="audioplayer"></div>
+<div id="msg"></div>
+
+</body>
+</html>
